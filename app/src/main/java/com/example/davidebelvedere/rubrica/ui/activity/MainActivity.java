@@ -15,8 +15,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.davidebelvedere.rubrica.R;
+import com.example.davidebelvedere.rubrica.data.Contatto;
 import com.example.davidebelvedere.rubrica.logic.Utility;
 import com.example.davidebelvedere.rubrica.ui.adapter.CustomArrayAdapter;
+
+import java.util.List;
 
 import static java.lang.String.valueOf;
 
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(customAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /* listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -50,12 +53,25 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
+        });*/
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               Contatto selectedItem =Utility.getDataSourceItemList(getApplicationContext()).get(position);
+
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("nome", selectedItem.getNome());
+                intent.putExtra("numero",selectedItem.getTelefono());
+
+                startActivity(intent);
+
+            }
         });
     }
     @Override
     protected void onResume(){
         super.onResume();
-        customAdapter.notifyDataSetChanged();
+        customAdapter.refreshValues();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

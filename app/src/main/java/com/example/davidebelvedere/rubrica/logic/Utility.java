@@ -1,6 +1,8 @@
 package com.example.davidebelvedere.rubrica.logic;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.davidebelvedere.rubrica.R;
 import com.example.davidebelvedere.rubrica.data.Contatto;
@@ -20,6 +22,10 @@ public class Utility {
     public static void initDataSource(Context context) {
         List<Contatto> contactList = new ArrayList<Contatto>();
         contactList.add(new Contatto("Giacomo", "3483222395"));
+        contactList.add(new Contatto("Giacomino", "3483222397"));
+        contactList.add(new Contatto("Giacometto", "3483222305"));
+        contactList.add(new Contatto("Giacomollo", "2483222395"));
+        contactList.add(new Contatto("Giacomonello", "3483222315"));
         MainSingleton.getInstance().setContactArray(contactList);
     }
 
@@ -32,15 +38,29 @@ public class Utility {
     }
 
 
-    public static  List <Contatto> getDataSourceItemList(Context context){
+    public static List<Contatto> getDataSourceItemList(Context context) {
         return MainSingleton.getInstance().getContactArray();
     }
 
-    public static void addItem(Contatto contatto){
+    public static void addItem(Contatto contatto) {
         MainSingleton.getInstance().addItem(contatto);
     }
 
-    public static void removeItem(int pos){
+    public static void removeItem(int pos) {
         MainSingleton.getInstance().removeItem(pos);
+    }
+
+    public static void writeOnSharedPref(String number, Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("preferiti",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("Preferito", number);
+        editor.commit();
+    }
+
+    public static String getFromSharedPref(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("preferiti", Context.MODE_PRIVATE);
+
+        String preferito= sharedPref.getString("Preferito","");
+        return preferito;
     }
 }
