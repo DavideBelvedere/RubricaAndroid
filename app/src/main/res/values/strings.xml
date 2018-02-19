@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Rubrica</string>
+    <string name="add">Aggiungi</string>
+    <string name="nome">Nome:</string>
+    <string name="tel">Telefono:</string>
+    <string name="button">Salva</string>
+</resources>
