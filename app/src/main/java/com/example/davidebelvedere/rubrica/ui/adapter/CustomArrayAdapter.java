@@ -3,6 +3,7 @@ package com.example.davidebelvedere.rubrica.ui.adapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +60,12 @@ public class CustomArrayAdapter extends ArrayAdapter<Contatto> {
         viewHolder.number.setText(contatto.getTelefono());
         viewHolder.image.setBackgroundColor(Utility.getColorForPosition(this.context, position));
 
-        if (preferito != "") {
-            if (preferito == contatto.getTelefono()) {
+
+        if (!preferito.equals("")) {
+            if (preferito.equals(contatto.getTelefono())) {
+
                 viewHolder.favourite.setVisibility(View.VISIBLE);
+
             } else {
                 viewHolder.favourite.setVisibility(View.INVISIBLE);
             }

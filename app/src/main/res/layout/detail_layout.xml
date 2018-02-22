@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/nome"
             android:text="@string/nome"
+            android:textSize="15sp"
             android:layout_marginTop="15dp"/>
 
 
@@ -28,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/telefono"
+            android:textSize="15sp"
             android:text="@string/tel" />
 
 

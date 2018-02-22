@@ -4,5 +4,5 @@
     <string name="nome">Nome:</string>
     <string name="tel">Telefono:</string>
     <string name="button">Salva</string>
-    <string name="addFavourite">Aggiungi ai preferiti</string>
+    <string name="addFavourite">Setta come preferito</string>
 </resources>

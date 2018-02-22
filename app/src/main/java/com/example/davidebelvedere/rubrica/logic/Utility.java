@@ -1,8 +1,11 @@
 package com.example.davidebelvedere.rubrica.logic;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import com.example.davidebelvedere.rubrica.R;
 import com.example.davidebelvedere.rubrica.data.Contatto;
@@ -63,4 +66,6 @@ public class Utility {
         String preferito= sharedPref.getString("Preferito","");
         return preferito;
     }
+
+
 }
