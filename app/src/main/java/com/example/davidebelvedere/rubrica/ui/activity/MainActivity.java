@@ -1,78 +1,48 @@
 package com.example.davidebelvedere.rubrica.ui.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListView;
 
 import com.example.davidebelvedere.rubrica.R;
-import com.example.davidebelvedere.rubrica.data.Contatto;
+
 import com.example.davidebelvedere.rubrica.logic.Utility;
-import com.example.davidebelvedere.rubrica.ui.adapter.CustomArrayAdapter;
+import com.example.davidebelvedere.rubrica.ui.adapter.MyRecyclerAdapter;
 
-import java.util.List;
-
-import static java.lang.String.valueOf;
 
 public class MainActivity extends AppCompatActivity {
-    private CustomArrayAdapter customAdapter;
+    private MyRecyclerAdapter customAdapter;
+    private RecyclerView myRecyclerView;
+    private RecyclerView.LayoutManager myLayoutManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Utility.initDataSource(MainActivity.this);
-        customAdapter = new CustomArrayAdapter(this, Utility.getDataSourceItemList(MainActivity.this));
-        ListView listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(customAdapter);
+        myRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 
-        /* listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        myLayoutManager = new LinearLayoutManager(this);
+        myRecyclerView.setLayoutManager(myLayoutManager);
 
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        customAdapter = new MyRecyclerAdapter(Utility.getDataSourceItemList(), this);
+        myRecyclerView.setAdapter(customAdapter);
 
-                alertDialogBuilder.setTitle("Elimina contatto").setMessage("Sei sicuro di voler rimuovere questo contatto?").setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Utility.removeItem(position);
-                        customAdapter.notifyDataSetChanged();
-                    }
-                }).setNegativeButton("no", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-
-
-            }
-        });*/
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Contatto selectedItem =Utility.getDataSourceItemList(getApplicationContext()).get(position);
-
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra("nome", selectedItem.getNome());
-                intent.putExtra("numero",selectedItem.getTelefono());
-
-                startActivity(intent);
-
-            }
-        });
     }
+
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        customAdapter.refreshValues();
+        customAdapter.updateData();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -80,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-     @Override
-     public boolean onOptionsItemSelected(MenuItem item) {
-       switch (item.getItemId()) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.action_add: {
                 Intent intent = new Intent(MainActivity.this, ContactDetailActivity.class);
                 startActivity(intent);

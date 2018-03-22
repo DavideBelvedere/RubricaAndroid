@@ -41,7 +41,7 @@ public class Utility {
     }
 
 
-    public static List<Contatto> getDataSourceItemList(Context context) {
+    public static List<Contatto> getDataSourceItemList() {
         return MainSingleton.getInstance().getContactArray();
     }
 
