@@ -9,8 +9,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.example.davidebelvedere.rubrica.R;
 
+import com.example.davidebelvedere.rubrica.R;
 import com.example.davidebelvedere.rubrica.logic.Utility;
 import com.example.davidebelvedere.rubrica.ui.adapter.MyRecyclerAdapter;
 

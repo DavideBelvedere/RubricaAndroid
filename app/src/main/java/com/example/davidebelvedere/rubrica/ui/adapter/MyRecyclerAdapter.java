@@ -86,12 +86,22 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
     @Override
     public void onBindViewHolder(MyRecyclerAdapter.MyViewHolder holder, int position) {
+        String preferito = Utility.getFromSharedPref(this.context);
         Contatto currentContact = values.get(position);
         holder.name.setText(currentContact.getNome());
         holder.number.setText(currentContact.getTelefono());
         holder.image.setBackgroundColor(Utility.getColorForPosition(context, position));
         holder.position = position;
         holder.context = context;
+        if (!preferito.equals("")) {
+            if (preferito.equals(currentContact.getTelefono())) {
+
+                holder.favourite.setVisibility(View.VISIBLE);
+
+            } else {
+                holder.favourite.setVisibility(View.INVISIBLE);
+            }
+        }
 
     }
 
