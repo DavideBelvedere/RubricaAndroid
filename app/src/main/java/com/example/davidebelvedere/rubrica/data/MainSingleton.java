@@ -1,5 +1,8 @@
 package com.example.davidebelvedere.rubrica.data;
 
+import com.example.davidebelvedere.rubrica.logic.DbManager;
+import com.example.davidebelvedere.rubrica.ui.activity.MainActivity;
+
 import java.util.List;
 
 /**
@@ -7,7 +10,8 @@ import java.util.List;
  */
 
 public class MainSingleton {
-    private static List<Contatto> CONTACTS;
+    //private static List<Contatto> CONTACTS;
+    private static DbManager dbManager;
     private static MainSingleton mySingleton = new MainSingleton();
 
     private MainSingleton() {
@@ -18,19 +22,12 @@ public class MainSingleton {
         return mySingleton;
     }
 
-    public  List<Contatto> getContactArray() {
-        return CONTACTS;
+
+    public DbManager getDbManager() {
+        return dbManager;
     }
 
-    public  void setContactArray(List<Contatto> array) {
-        CONTACTS = array;
-    }
-
-    public void addItem(Contatto newContact){
-        CONTACTS.add(newContact);
-    }
-
-    public void removeItem(int position){
-        CONTACTS.remove(position);
+    public void setDbManager(DbManager dbManager) {
+        MainSingleton.dbManager = dbManager;
     }
 }

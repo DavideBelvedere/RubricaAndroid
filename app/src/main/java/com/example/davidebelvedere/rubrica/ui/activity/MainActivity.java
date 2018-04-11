@@ -1,36 +1,35 @@
 package com.example.davidebelvedere.rubrica.ui.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.davidebelvedere.rubrica.R;
 import com.example.davidebelvedere.rubrica.data.Contatto;
+import com.example.davidebelvedere.rubrica.data.MainSingleton;
+import com.example.davidebelvedere.rubrica.logic.DbManager;
 import com.example.davidebelvedere.rubrica.logic.Utility;
-import com.example.davidebelvedere.rubrica.ui.adapter.CustomArrayAdapter;
-
-import java.util.List;
+import com.example.davidebelvedere.rubrica.ui.adapter.MyCursorAdapter;
 
 import static java.lang.String.valueOf;
 
 public class MainActivity extends AppCompatActivity {
-    private CustomArrayAdapter customAdapter;
+    private MyCursorAdapter customAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Utility.initDataSource(MainActivity.this);
-        customAdapter = new CustomArrayAdapter(this, Utility.getDataSourceItemList(MainActivity.this));
+        Utility.initDataSource(this);
+
+        customAdapter = new MyCursorAdapter(this, MainSingleton.getInstance().getDbManager().fetchAllContacts());
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(customAdapter);
 
@@ -57,22 +56,29 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Contatto selectedItem =Utility.getDataSourceItemList(getApplicationContext()).get(position);
+
 
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra("nome", selectedItem.getNome());
-                intent.putExtra("numero",selectedItem.getTelefono());
+                Cursor c = (Cursor) customAdapter.getItem(position);
+                intent.putExtra("nome", c.getString(c.getColumnIndexOrThrow(DbManager.KEY_NAME)));
+                intent.putExtra("numero", c.getString(c.getColumnIndexOrThrow(DbManager.KEY_PHONE)));
+                intent.putExtra("preferito", ""+c.getInt(c.getColumnIndexOrThrow(DbManager.KEY_FAVOURITE)));
+                intent.putExtra("id", ""+c.getInt(c.getColumnIndexOrThrow(DbManager.KEY_CONTACTID)));
+
 
                 startActivity(intent);
 
             }
         });
     }
-    @Override
-    protected void onResume(){
+
+    protected void onResume() {
         super.onResume();
-        customAdapter.refreshValues();
+
+        customAdapter.changeCursor(MainSingleton.getInstance().getDbManager().fetchAllContacts());
+        customAdapter.notifyDataSetChanged();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -80,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-     @Override
-     public boolean onOptionsItemSelected(MenuItem item) {
-       switch (item.getItemId()) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.action_add: {
                 Intent intent = new Intent(MainActivity.this, ContactDetailActivity.class);
                 startActivity(intent);
@@ -91,5 +97,11 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MainSingleton.getInstance().getDbManager().close();
     }
 }

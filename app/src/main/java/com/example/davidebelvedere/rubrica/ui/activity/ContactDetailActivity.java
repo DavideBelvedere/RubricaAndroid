@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.davidebelvedere.rubrica.R;
 import com.example.davidebelvedere.rubrica.data.Contatto;
+import com.example.davidebelvedere.rubrica.data.MainSingleton;
 import com.example.davidebelvedere.rubrica.logic.Utility;
 
 import static java.lang.String.valueOf;
@@ -38,9 +39,9 @@ public class ContactDetailActivity extends Activity {
             public void onClick(View view) {
                 EditText nome = (EditText) findViewById(R.id.nome);
                 EditText numero = (EditText) findViewById(R.id.numero);
-                Contatto newContact = new Contatto(valueOf(nome.getText()), valueOf(numero.getText()));
-                Utility.addItem(newContact);
 
+                MainSingleton.getInstance().getDbManager().open();
+                MainSingleton.getInstance().getDbManager().createContact(String.valueOf(nome.getText()),String.valueOf(numero.getText()),0);
                 finish();
             }
         });
